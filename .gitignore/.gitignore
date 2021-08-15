@@ -1,0 +1,11 @@
+# Mac OS files
+.DS_Store
+
+# logs
+logs
+*.log
+
+#Optional eslint cache
+.eselintcache
+
+

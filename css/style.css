@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+}
+
+article {
+  display: flex;
+  flex-direction: row;
+}
+
+section {
+  background-color: tomato;
+}
+
+img {
+  width: 300px;
+  height: 300px;
+  margin: 30px;
+}
+
+img:hover {
+  border: black solid 5px;
+  transition: 50ms;
+}
