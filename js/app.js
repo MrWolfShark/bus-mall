@@ -2,9 +2,7 @@
 
 let clicks = 0;
 let clickLimit = 25;
-let leftItem = null;
-let middleItem = null;
-let rightItem = null;
+let itemsDisplayed =[];
 
 var Item = function(name, fileType, descr) {
   this.name = name;
@@ -45,23 +43,26 @@ function rendorItem(src, elementID, descr) {
 }
 
 function rendorThreeItems(arr) {
-  leftItem = arr[Math.floor(Math.random() * (arr.length - 1))]
-  middleItem = arr[Math.floor(Math.random() * (arr.length - 1))]
-  rightItem = arr[Math.floor(Math.random() * (arr.length - 1))]
-  while (
-    leftItem.name === middleItem.name || rightItem.name === leftItem.name || rightItem.name === middleItem.name
-  ) { 
-    middleItem = arr[Math.floor(Math.random() * (arr.length - 1))];
-    rightItem = arr[Math.floor(Math.random() * (arr.length - 1))];
+  while (itemsDisplayed.length < 6) {
+    let num = Math.floor(Math.random() * (arr.length - 1));
+    if (!itemsDisplayed.includes(num)) {
+      itemsDisplayed.push(num);
+    }
   };
+  console.log(itemsDisplayed);
 
-  leftItem.timesDisplayed += 1;
-  middleItem.timesDisplayed += 1;
-  rightItem.timesDisplayed += 1;
+  let leftItemIndex = itemsDisplayed[0];
+  let middleItemIndex = itemsDisplayed[1];
+  let rightItemIndex = itemsDisplayed[2];
 
-  rendorItem(middleItem.src, 'middle-item', middleItem.descr)
-  rendorItem(leftItem.src, 'left-item', leftItem.descr)
-  rendorItem(rightItem.src, 'right-item', rightItem.descr)
+  rendorItem(items[leftItemIndex].src, 'left-item', items[leftItemIndex].descr);
+  rendorItem(items[middleItemIndex].src, 'middle-item', items[middleItemIndex].descr);
+  rendorItem(items[rightItemIndex].src, 'right-item', items[rightItemIndex].descr);
+
+  items[leftItemIndex].timesDisplayed++;
+  items[middleItemIndex].timesDisplayed++;
+  items[rightItemIndex].timesDisplayed++;
+
 }
 
 rendorThreeItems(items);
@@ -77,20 +78,6 @@ function removeEventListeners () {
     rightItemDisplayed.removeEventListener('click', pickRight);
 }
 
-function createButtonInElementID (elementID, buttonTxt) {
-  let element = document.getElementById(elementID);
-  let button = document.createElement('button');
-  button.setAttribute('type', 'click');
-  button.textContent = buttonTxt;
-  element.appendChild(button);
-  addButtonListener();
-}
-
-function addButtonListener () {
-  let button = document.querySelector('button');
-  button.addEventListener('click', showResults);
-}
-
 function pickRendor(item){
   item.timeClicked += 1;
   clicks += 1;
@@ -99,8 +86,8 @@ function pickRendor(item){
   clearContentByID('right-item');
   rendorThreeItems(items);
   if (clicks === clickLimit) {
-    removeEventListeners()
-    createButtonInElementID('results', 'View Results');
+    removeEventListeners();
+    renderChart();
   }
 }
 
@@ -110,34 +97,82 @@ let rightItemDisplayed = document.getElementById('right-item');
 
 
 let pickLeft = function (event) {
-  pickRendor(leftItem);
+  itemsDisplayed.shift();
+  itemsDisplayed.shift();
+  itemsDisplayed.shift();
+  pickRendor(items[itemsDisplayed[0]]);
+  console.log('shifted')
 }
 
 let pickRight = function (event) {
-  pickRendor(rightItem);
+  itemsDisplayed.shift();
+  itemsDisplayed.shift();
+  itemsDisplayed.shift();
+  pickRendor(items[itemsDisplayed[2]]);
+  
 }
 
 let pickMiddle = function (event) {
-  pickRendor(middleItem);
+  itemsDisplayed.shift();
+  itemsDisplayed.shift();
+  itemsDisplayed.shift();
+  pickRendor(items[itemsDisplayed[1]]);
 }
 
-let showResults = function (event) {
-  let resultsParent = document.getElementById('results');
-  let list = document.createElement('ul');
-  for (let i=0; i < items.length; i++) {
-    let listItem = document.createElement('li');
-    listItem.textContent = `${items[i].name} had ${items[i].timeClicked}, and was seen ${items[i].timesDisplayed} times.`;
-    list.appendChild(listItem);
-  };
-  resultsParent.appendChild(list);
-  let button = document.querySelector('button');
-  button.removeEventListener('click', showResults);
-}
+// let showResults = function (event) {
+//   let resultsParent = document.getElementById('results');
+//   let list = document.createElement('ul');
+//   for (let i=0; i < items.length; i++) {
+//     let listItem = document.createElement('li');
+//     listItem.textContent = `${items[i].name} had ${items[i].timeClicked}, and was seen ${items[i].timesDisplayed} times.`;
+//     list.appendChild(listItem);
+//   };
+//   resultsParent.appendChild(list);
+//   let button = document.querySelector('button');
+//   button.removeEventListener('click', showResults);
+// }
 
 leftItemDisplayed.addEventListener('click', pickLeft);
 middleItemDisplayed.addEventListener('click', pickMiddle);
 rightItemDisplayed.addEventListener('click', pickRight);
 
-
-
-
+function renderChart() {
+  let itemClicks = [];
+  let itemViews = [];
+  let itemNames = [];
+  for (let i = 0; i < items.length; i++) {
+    itemNames.push(items[i].name);
+    itemClicks.push(items[i].timeClicked);
+    itemViews.push(items[i].timesDisplayed);
+  }
+  let chartObject = {
+    type: 'bar',
+    data: {
+      labels: itemNames,
+      datasets: [{
+        label: '# of Views',
+        data: itemViews,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+      },
+      {
+        label: '# of Clicks',
+        data: itemClicks,
+        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+        borderColor: 'rgba(255, 206, 86, 1)',
+        borderWidth: 1
+      }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+  let ctx = document.getElementById('myChart').getContext('2d');
+  let myChart = new Chart(ctx, chartObject);
+}
