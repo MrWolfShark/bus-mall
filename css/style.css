@@ -21,3 +21,9 @@ img:hover {
   border: black solid 5px;
   transition: 50ms;
 }
+
+canvas {
+  max-width: 500px;
+  max-height: 300px;
+  margin: auto;
+}
