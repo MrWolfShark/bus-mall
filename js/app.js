@@ -141,8 +141,7 @@ function renderChart() {
   let itemClicks = [];
   let itemViews = [];
   let itemNames = [];
-  let itemsToStore = JSON.stringify(items);
-  localStorage.setItem('items', itemsToStore);
+  persistArrayData();
   for (let i = 0; i < items.length; i++) {
     itemNames.push(items[i].name);
     itemClicks.push(items[i].timeClicked);
