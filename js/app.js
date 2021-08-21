@@ -25,24 +25,24 @@ function persistArrayData () {
 
 if (!localStorage.getItem('items')) {
   let items = [];
-  items.push("bag", "jpg", "R2D2 Rolling travel bag")
-  items.push("banana", "jpg", "Banana slicing tool for cutting bananas into slices")
-  items.push("bathroom", "jpg", "iPad and toilet paper holding stand")
-  items.push("breakfast", "jpg", "Open toe rain boots")
-  items.push("bubblegum", "jpg", "Open toe rain boots")
-  items.push("chair", "jpg", "Open toe rain boots")
-  items.push("cthulhu", "jpg", "Open toe rain boots")
-  items.push("dog-duck", "jpg", "Open toe rain boots")
-  items.push("dragon", "jpg", "Open toe rain boots")
-  items.push("pen", "jpg", "Open toe rain boots")
-  items.push("pet-sweep", "jpg", "Open toe rain boots")
-  items.push("scissors", "jpg", "Open toe rain boots")
-  items.push("shark", "jpg", "Open toe rain boots")
-  items.push("sweep", "png", "Open toe rain boots")
-  items.push("tauntaun", "jpg", "Open toe rain boots")
-  items.push("unicorn", "jpg", "Open toe rain boots")
-  items.push("water-can", "jpg", "Open toe rain boots")
-  items.push("wine-glass", "jpg", "Open toe rain boots")  
+  items.push(new Item("bag", "jpg", "R2D2 Rolling travel bag"));
+  items.push(new Item("banana", "jpg", "Banana slicing tool for cutting bananas into slices"));
+  items.push(new Item("bathroom", "jpg", "iPad and toilet paper holding stand"));
+  items.push(new Item("breakfast", "jpg", "Open toe rain boots"));
+  items.push(new Item("bubblegum", "jpg", "Open toe rain boots"));
+  items.push(new Item("chair", "jpg", "Open toe rain boots"));
+  items.push(new Item("cthulhu", "jpg", "Open toe rain boots"));
+  items.push(new Item("dog-duck", "jpg", "Open toe rain boots"));
+  items.push(new Item("dragon", "jpg", "Open toe rain boots"));
+  items.push(new Item("pen", "jpg", "Open toe rain boots"));
+  items.push(new Item("pet-sweep", "jpg", "Open toe rain boots"));
+  items.push(new Item("scissors", "jpg", "Open toe rain boots"));
+  items.push(new Item("shark", "jpg", "Open toe rain boots"));
+  items.push(new Item("sweep", "png", "Open toe rain boots"));
+  items.push(new Item("tauntaun", "jpg", "Open toe rain boots"));
+  items.push(new Item("unicorn", "jpg", "Open toe rain boots"));
+  items.push(new Item("water-can", "jpg", "Open toe rain boots"));
+  items.push(new Item("wine-glass", "jpg", "Open toe rain boots")); 
 } else {
   let storedData = localStorage.getItem('items');
   let parsedData = JSON.parse(storedData);
