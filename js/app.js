@@ -2,6 +2,7 @@
 
 let clicks = 0;
 let clickLimit = 25;
+
 let itemsDisplayed =[];
 
 var Item = function(name, fileType, descr) {
@@ -13,26 +14,41 @@ var Item = function(name, fileType, descr) {
   this.src = `./img/${name}.${fileType}`
 }
 
-let items = [
-  new Item("bag", "jpg", "R2D2 Rolling travel bag"),
-  new Item("banana", "jpg", "Banana slicing tool for cutting bananas into slices"),
-  new Item("bathroom", "jpg", "iPad and toilet paper holding stand"),
-  new Item("breakfast", "jpg", "Open toe rain boots"),
-  new Item("bubblegum", "jpg", "Open toe rain boots"),
-  new Item("chair", "jpg", "Open toe rain boots"),
-  new Item("cthulhu", "jpg", "Open toe rain boots"),
-  new Item("dog-duck", "jpg", "Open toe rain boots"),
-  new Item("dragon", "jpg", "Open toe rain boots"),
-  new Item("pen", "jpg", "Open toe rain boots"),
-  new Item("pet-sweep", "jpg", "Open toe rain boots"),
-  new Item("scissors", "jpg", "Open toe rain boots"),
-  new Item("shark", "jpg", "Open toe rain boots"),
-  new Item("sweep", "png", "Open toe rain boots"),
-  new Item("tauntaun", "jpg", "Open toe rain boots"),
-  new Item("unicorn", "jpg", "Open toe rain boots"),
-  new Item("water-can", "jpg", "Open toe rain boots"),
-  new Item("wine-glass", "jpg", "Open toe rain boots"),  
-]
+function createItem(name, fileType, descr) {
+  (new Item(name, fileType, descr))
+}
+
+function persistArrayData () {
+  let stringifiedItems = JSON.stringify(items);
+  localStorage.setItem('items', stringifiedItems);
+}
+
+if (!localStorage.getItem('items')) {
+  let items = [];
+  items.push("bag", "jpg", "R2D2 Rolling travel bag")
+  items.push("banana", "jpg", "Banana slicing tool for cutting bananas into slices")
+  items.push("bathroom", "jpg", "iPad and toilet paper holding stand")
+  items.push("breakfast", "jpg", "Open toe rain boots")
+  items.push("bubblegum", "jpg", "Open toe rain boots")
+  items.push("chair", "jpg", "Open toe rain boots")
+  items.push("cthulhu", "jpg", "Open toe rain boots")
+  items.push("dog-duck", "jpg", "Open toe rain boots")
+  items.push("dragon", "jpg", "Open toe rain boots")
+  items.push("pen", "jpg", "Open toe rain boots")
+  items.push("pet-sweep", "jpg", "Open toe rain boots")
+  items.push("scissors", "jpg", "Open toe rain boots")
+  items.push("shark", "jpg", "Open toe rain boots")
+  items.push("sweep", "png", "Open toe rain boots")
+  items.push("tauntaun", "jpg", "Open toe rain boots")
+  items.push("unicorn", "jpg", "Open toe rain boots")
+  items.push("water-can", "jpg", "Open toe rain boots")
+  items.push("wine-glass", "jpg", "Open toe rain boots")  
+} else {
+  let storedData = localStorage.getItem('items');
+  let parsedData = JSON.parse(storedData);
+  console.log(parsedData);
+  var items = parsedData;
+}
 
 function rendorItem(src, elementID, descr) {
   let element = document.getElementById(`${elementID}`);
@@ -44,12 +60,11 @@ function rendorItem(src, elementID, descr) {
 
 function rendorThreeItems(arr) {
   while (itemsDisplayed.length < 6) {
-    let num = Math.floor(Math.random() * (arr.length - 1));
+    let num = Math.floor(Math.random() * (arr.length));
     if (!itemsDisplayed.includes(num)) {
       itemsDisplayed.push(num);
     }
   };
-  console.log(itemsDisplayed);
 
   let leftItemIndex = itemsDisplayed[0];
   let middleItemIndex = itemsDisplayed[1];
@@ -101,7 +116,6 @@ let pickLeft = function (event) {
   itemsDisplayed.shift();
   itemsDisplayed.shift();
   pickRendor(items[itemsDisplayed[0]]);
-  console.log('shifted')
 }
 
 let pickRight = function (event) {
@@ -119,19 +133,6 @@ let pickMiddle = function (event) {
   pickRendor(items[itemsDisplayed[1]]);
 }
 
-// let showResults = function (event) {
-//   let resultsParent = document.getElementById('results');
-//   let list = document.createElement('ul');
-//   for (let i=0; i < items.length; i++) {
-//     let listItem = document.createElement('li');
-//     listItem.textContent = `${items[i].name} had ${items[i].timeClicked}, and was seen ${items[i].timesDisplayed} times.`;
-//     list.appendChild(listItem);
-//   };
-//   resultsParent.appendChild(list);
-//   let button = document.querySelector('button');
-//   button.removeEventListener('click', showResults);
-// }
-
 leftItemDisplayed.addEventListener('click', pickLeft);
 middleItemDisplayed.addEventListener('click', pickMiddle);
 rightItemDisplayed.addEventListener('click', pickRight);
@@ -140,6 +141,8 @@ function renderChart() {
   let itemClicks = [];
   let itemViews = [];
   let itemNames = [];
+  let itemsToStore = JSON.stringify(items);
+  localStorage.setItem('items', itemsToStore);
   for (let i = 0; i < items.length; i++) {
     itemNames.push(items[i].name);
     itemClicks.push(items[i].timeClicked);
