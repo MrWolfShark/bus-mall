@@ -24,7 +24,7 @@ function persistArrayData () {
 }
 
 if (!localStorage.getItem('items')) {
-  let items = [];
+  var items = [];
   items.push(new Item("bag", "jpg", "R2D2 Rolling travel bag"));
   items.push(new Item("banana", "jpg", "Banana slicing tool for cutting bananas into slices"));
   items.push(new Item("bathroom", "jpg", "iPad and toilet paper holding stand"));
